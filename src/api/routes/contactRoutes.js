@@ -338,7 +338,7 @@ router.get('/download', contactController.downloadContacts);
 
 /**
  * @swagger
- * contacts/upload-file:
+ * /contacts/upload-file:
  *   post:
  *     summary: Upload contacts
  *     description: Uploads a CSV or Excel file containing contacts for a user.
@@ -396,7 +396,7 @@ router.get('/download', contactController.downloadContacts);
  *                   description: Error message.
  */
 
-router.post('/upload', upload.single('file'), contactController.uploadContacts)
+router.post('/upload-file', upload.single('file'), contactController.uploadContacts)
 
 
 module.exports = router;

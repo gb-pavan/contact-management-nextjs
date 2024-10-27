@@ -110,7 +110,10 @@ exports.batchProcessContacts = async (req, res) => {
 };
 
 exports.uploadContacts = async (req, res) => {
+
+    console.log("file", req.file);
     if (!req.file) {
+        console.log("noooooo file");
         return res.status(400).json({ error: "No file uploaded." });
     }
 
