@@ -3,6 +3,7 @@ const express = require('express');
 
 
 const authRoutes = require('./routes/authRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
     app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
     app.use('/auth', authRoutes);
+    app.use('/contacts',contactRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
