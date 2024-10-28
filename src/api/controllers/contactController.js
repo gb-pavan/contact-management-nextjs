@@ -208,7 +208,9 @@ exports.downloadContacts = async (req, res) => {
     const contacts = await contactService.getContactsByEmail(user_mail); // Assume this gets all contacts
     console.log("contacts download", contacts);
 
-    const exportPath = path.join(__dirname, '../exports');
+    const exportPath = path.join(__dirname, 'exports');
+
+    console.log("path checcking", exportPath);
     if (!fs.existsSync(exportPath)) {
         fs.mkdirSync(exportPath, { recursive: true });
     }
