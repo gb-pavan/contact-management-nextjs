@@ -1,40 +1,214 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
-## Getting Started
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+*** Contact Management App ***
+This application provides a RESTful API for user authentication and contact management. It is built using Node.js and Express. API end points are tested using swagger.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+*** Running the Backend Server ***
+To start the backend server, run:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+`npm run dev` 
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+It will run the application, it runs the backend server as well.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+*** API Endpoints ***
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### *** Register User ***
+- **Path:** `http://localhost:3000/auth/register`
+- **Method:** `POST`
+- **Request Body:**
+    ```json
+    Copy code
+    {
+    "email": "testten@example.com",
+    "password": "pass10"
+    }```
+-**Response:** A link will be sent to the provided email for verification. When clicked, the isVerified column in the users table is set to true.
 
-## Learn More
+### *** Login User ***
+- **Path:** `http://localhost:3000/auth/login`
+- **Method:** `POST`
+- **Request Body:**
+    ```json
+    Copy code
+    {
+    "email": "testten@example.com",
+    "password": "pass10"
+    }```
+-**Response:** Upon successful login, you will receive a JWT token.
 
-To learn more about Next.js, take a look at the following resources:
+### *** Forgot Password ***
+- **Path:** `http://localhost:3000/auth/forgot/forgot-password`
+- **Method:** `POST`
+-  **Request Body:**
+    ```json
+    Copy code
+    {
+    "email": "testten@example.com"
+    }```
+- **Response:** An OTP will be sent to the provided email for password reset.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### *** Reset Password ***
+- **Path:**  `http://localhost:3000/auth/reset/reset-password`
+- **Method:** `POST`
+- **Request Body:**
+    ```json
+    Copy code
+    {
+    "email": "testten@example.com",
+    "otp": 992911,
+    "newPassword": "passnew"
+    }```
+- **Response:** If the OTP is valid, the password will be reset successfully, and a confirmation message will be returned.
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+### *** Upload Contacts ***
+
+- **Method:** `POST`
+- **Path:** `http://localhost:3000/contacts/upload`
+- **Description:** Uploads a CSV or Excel file containing contacts for a user.
+- **Request Body:**
+    ```json
+    {
+        "user_mail": "user@example.com",
+        "file": "binary file"
+    }
+    ```
+- **Response:** Contacts uploaded successfully.
+
+### *** Add a New Contact ***
+
+- **Method:** `POST`
+- **Path:** `http://localhost:3000/contacts/add-contact`
+- **Description:** Creates a new contact associated with a user.
+- **Request Body:**
+    ```json
+    {
+        "user_mail": "user@example.com",
+        "contact": {
+            "name": "John Doe",
+            "email": "john.doe@example.com",
+            "phone": "1234567890",
+            "address": "123 Main St, City, Country",
+            "timezone": "GMT+5:30"
+        }
+    }
+    ```
+- **Response:** Contact added successfully.
+
+### *** Retrieve Contacts ***
+
+- **Method:** `GET`
+- **Path:** `http://localhost:3000/contacts/get-contacts`
+- **Description:** Fetches a list of contacts for a user, with optional filters and sorting.
+- **Request Body:**
+    ```json
+    {
+        "user_mail": "user@example.com",
+        "filters": {
+            "field1": "value1"
+        },
+        "sort": {
+            "field": "name",
+            "order": "asc"
+        },
+        "dateRange": {
+            "startDate": "2023-01-01",
+            "endDate": "2023-12-31"
+        }
+    }
+    ```
+- **Response:** Successfully retrieved contacts.
+
+### *** Update an Existing Contact ***
+
+- **Method:** `PUT`
+- **Path:** `http://localhost:3000/contacts/update-contact`
+- **Description:** Updates the details of a specific contact for a user.
+- **Request Body:**
+    ```json
+    {
+        "user_mail": "user@example.com",
+        "contactId": 1,
+        "updates": {
+            "name": "John Smith",
+            "email": "john.smith@example.com",
+            "phone": "0987654321",
+            "address": "456 Main St, City, Country",
+            "timezone": "GMT+5:30"
+        }
+    }
+    ```
+- **Response:** Contact updated successfully.
+
+### *** Delete a Contact ***
+
+- **Method:** `DELETE`
+- **Path:** `http://localhost:3000/contacts/delete-contact`
+- **Description:** Deletes a specific contact for a user.
+- **Request Body:**
+    ```json
+    {
+        "user_mail": "user@example.com",
+        "contactId": 1
+    }
+    ```
+- **Response:** Contact deleted successfully.
+
+### *** Batch Process Contacts ***
+
+- **Method:** `POST`
+- **Path:** `http://localhost:3000/contacts/batch-update-contacts`
+- **Description:** Processes a batch of contacts for a user.
+- **Request Body:**
+    ```json
+    {
+        "user_mail": "user@example.com",
+        "contacts": [
+            {
+                "name": "John Doe",
+                "email": "john.doe@example.com",
+                "phone": "1234567890",
+                "address": "123 Main St, City, Country",
+                "timezone": "GMT+5:30"
+            },
+            {
+                "name": "Jane Doe",
+                "email": "jane.doe@example.com",
+                "phone": "1234567891",
+                "address": "456 Main St, City, Country",
+                "timezone": "GMT+5:30"
+            }
+        ]
+    }
+    ```
+- **Response:** Batch processing completed successfully.
+
+### *** Download Contacts ***
+
+- **Method:** `GET`
+- **Path:** `http://localhost:3000/contacts/download`
+- **Description:** Downloads all contacts for a specified user as a CSV file.
+- **Query Parameter:** 
+    - **user_mail:** The email of the user whose contacts are being downloaded.
+- **Response:** CSV file downloaded successfully.
+
+### *** Upload Contacts File ***
+
+- **Method:** `POST`
+- **Path:** `http://localhost:3000/contacts/upload-file`
+- **Description:** Uploads a CSV or Excel file containing contacts for a user.
+- **Request Body:**
+    ```json
+    {
+        "user_mail": "user@example.com",
+        "file": "binary file"
+    }
+    ```
+- **Response:** Contacts uploaded successfully.
+
+
+*** End of Document ***
+

@@ -121,6 +121,8 @@ exports.uploadContacts = async (req, res) => {
 
     const {user_mail} = req.body;
 
+    console.log("usermail",user_mail);
+
     // const filePath = '/home/pavan/contacts.csv';
 
     try {
@@ -145,6 +147,7 @@ exports.uploadContacts = async (req, res) => {
                     } else {
                         // Add valid rows to the contacts array
                         contacts.push(row);
+                        console.log("got contacts");
                     }
                 })
                 .on('end', async () => {
