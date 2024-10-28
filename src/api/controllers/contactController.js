@@ -198,8 +198,8 @@ const processContacts = async (contacts, user_mail) => {
     }
 };
 // Ensure the exports directory exists
-    if (!fs.existsSync('/home/pavan/projects/contact-management-app/exports')) {
-        fs.mkdirSync('/home/pavan/projects/contact-management-app/exports', { recursive: true });
+    if (!fs.existsSync('/home/pavan/projects/contact-management-app/src/api/exports')) {
+        fs.mkdirSync('/home/pavan/projects/contact-management-app/src/api/exports', { recursive: true });
     }
 
 
