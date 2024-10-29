@@ -1,6 +1,3 @@
-
-
-
 *** Contact Management App ***
 This application provides a RESTful API for user authentication and contact management. It is built using Node.js and Express. API end points are tested using swagger.
 
@@ -10,6 +7,10 @@ To start the backend server, run:
 `npm run dev` 
 
 It will run the application, it runs the backend server as well.
+
+*** Swagger page ***
+
+`http://localhost:3000/api`
 
 *** API Endpoints ***
 
