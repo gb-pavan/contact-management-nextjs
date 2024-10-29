@@ -396,7 +396,7 @@ router.get('/download', contactController.downloadContacts);
  *                   description: Error message.
  */
 
-router.post('/upload-file', upload.single('file'), contactController.uploadContacts)
+router.post('/upload-file', upload.single('file'), contactController.uploadContacts);
 
 
 module.exports = router;
