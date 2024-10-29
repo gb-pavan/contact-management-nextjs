@@ -5,7 +5,6 @@ app.use(express.json());
 const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser'); // Use a library for CSV parsing
-const xlsx = require('xlsx'); // For handling Excel files
 const { createObjectCsvWriter } = require('csv-writer');
 const {contactSchema } = require('../validators/userValidator');
 
@@ -109,167 +108,6 @@ exports.batchProcessContacts = async (req, res) => {
     }
 };
 
-// exports.uploadContacts = async (req, res) => {
-
-//     console.log("file", req.file);
-//     if (!req.file) {
-//         console.log("noooooo file");
-//         return res.status(400).json({ error: "No file uploaded." });
-//     }
-
-//     const filePath = path.join(__dirname, '../uploads/', req.file.filename);
-
-//     console.log("filePath",filePath);
-
-//     const {user_mail} = req.body;
-
-//     console.log("usermail",user_mail);
-
-//     // const filePath = '/home/pavan/contacts.csv';
-
-//     try {
-//         const contacts = [];
-        
-        
-//         // Check the file type and parse accordingly
-//         if (req.file.mimetype === 'text/csv') {
-        
-//             console.log("file type", req.file.mimetype);
-//             console.log("debugging file path",fs.existsSync(filePath));
-           
-
-//             // Parse CSV file
-//             fs.createReadStream(filePath)
-//                 .pipe(csv())
-//                 .on('data', (row) => {
-//                     // contacts.push(row);
-//                     const { error } = contactSchema.validate(row); // Validate each row with contactSchema
-
-//                     console.log("error validating",error);
-            
-//                     if (error) {
-//                         // Collect validation errors if any
-//                         // errors.push({ row, error: error.details });
-//                         return res.json({error:error});
-//                     } else {
-//                         // Add valid rows to the contacts array
-//                         console.log("row after validating",row);
-//                         contacts.push(row);
-//                         console.log("got contacts");
-//                     }
-//                 })
-//                 .on('end', async () => {
-//                     // Validate and save contacts
-//                     await processContacts(contacts,user_mail);
-//                     res.status(200).json({ message: 'Contacts uploaded successfully.', contacts });
-//                 });
-//         } else {
-//             // Parse Excel file
-//             const workbook = xlsx.readFile(filePath);
-//             const sheetName = workbook.SheetNames[0];
-//             const worksheet = workbook.Sheets[sheetName];
-//             const jsonData = xlsx.utils.sheet_to_json(worksheet);
-//             contacts.push(...jsonData);
-
-//             // Validate and save contacts
-//             await processContacts(res,contacts,user_mail);
-//             res.status(200).json({ message: 'Contacts uploaded successfully.', contacts });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error: 'Failed to process the uploaded file.' });}
-//     // } finally {
-//     //     // Clean up: delete the uploaded file after processing
-//     //     fs.unlinkSync(filePath);
-//     // }
-// };
-
-// exports.uploadContacts = async (req, res) => {
-
-//     console.log("Uploaded file information:", req.file);
-
-//     if (!req.file) {
-//         console.log("No file uploaded.");
-//         return res.status(400).json({ error: "No file uploaded." });
-//     }
-
-//     const filePath = req.file.path;
-//     console.log("Using multer-provided filePath:", filePath);
-//     console.log("File exists check after upload:", fs.existsSync(filePath));
-
-//     const { user_mail } = req.body;
-//     console.log("User email:", user_mail);
-
-//     try {
-//         const contacts = [];
-
-//         if (req.file.mimetype === 'text/csv') {
-//             console.log("Detected file type:", req.file.mimetype);
-//             console.log("File path exists before streaming:", fs.existsSync(filePath));
-
-//             const readStream = fs.createReadStream(filePath);
-//             readStream
-//                 .pipe(csv())
-//                 .on('data', (row) => {
-//                     console.log("Row data before validation:", row);
-//                     const { error } = contactSchema.validate(row);
-
-//                     if (error) {
-//                         console.log("Validation error:", error);
-//                         res.status(400).json({ error });
-//                         readStream.destroy(); // Stop processing if there's a validation error
-//                     } else {
-//                         console.log("Row after validation:", row);
-//                         contacts.push(row);
-//                     }
-//                 })
-//                 .on('end', async () => {
-//                     console.log("Finished reading CSV. Total contacts:", contacts.length);
-//                     await processContacts(contacts, user_mail);
-//                     res.status(200).json({ message: 'Contacts uploaded successfully.', contacts });
-//                 })
-//                 .on('close', () => {
-//                     if (fs.existsSync(filePath)) {
-//                         fs.unlink(filePath, (err) => {
-//                             if (err) console.error("Error deleting file:", err);
-//                             else console.log("File successfully deleted:", filePath);
-//                         });
-//                     }
-//                 })
-//                 .on('error', (streamError) => {
-//                     console.error("Stream error during CSV parsing:", streamError);
-//                     res.status(500).json({ error: 'Error during file read stream.' });
-//                 });
-
-//         } else {
-//             console.log("File type is Excel:", req.file.mimetype);
-//             try {
-//                 const workbook = xlsx.readFile(filePath);
-//                 const sheetName = workbook.SheetNames[0];
-//                 const worksheet = workbook.Sheets[sheetName];
-//                 const jsonData = xlsx.utils.sheet_to_json(worksheet);
-//                 contacts.push(...jsonData);
-
-//                 console.log("Finished reading Excel. Total contacts:", contacts.length);
-//                 await processContacts(contacts, user_mail);
-//                 res.status(200).json({ message: 'Contacts uploaded successfully.', contacts });
-
-//                 // Delete the file after processing Excel
-//                 fs.unlink(filePath, (err) => {
-//                     if (err) console.error("Error deleting file:", err);
-//                     else console.log("File successfully deleted:", filePath);
-//                 });
-
-//             } catch (xlsxError) {
-//                 console.error("Error during Excel parsing:", xlsxError);
-//                 res.status(500).json({ error: 'Failed to process the Excel file.' });
-//             }
-//         }
-//     } catch (error) {
-//         console.error("Outer try-catch error:", error);
-//         res.status(500).json({ error: 'Failed to process the uploaded file.' });
-//     }
-// };
-
 exports.uploadContacts = async (req, res) => {
     console.log("Uploaded file information:", req.file);
 
@@ -344,7 +182,6 @@ exports.uploadContacts = async (req, res) => {
     }
 };
 
-// Function to process contacts without using `res`
 const processContacts = async (contacts, user_mail) => {
     for (const contact of contacts) {
         await new Promise((resolve, reject) => {

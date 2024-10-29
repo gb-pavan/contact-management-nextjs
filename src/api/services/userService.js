@@ -7,7 +7,6 @@ exports.createUser = async (email,hashedPassword,callback) => {
     });
 };
 
-// Function to fetch a user by email
 exports.getUserByEmail = (email, callback) => {
     const query = `SELECT * FROM users WHERE email = ?`;
     db.get(query, [email], (err, user) => {
@@ -23,7 +22,6 @@ exports.updateUsersTable= (email, callback) => {
 };
 
 
-// Save OTP to database
 exports.saveOtpToDatabase = (email, otp, expiresAt) => {
   const query = `UPDATE users SET otp = ?, otp_expires_at = ? WHERE email = ?`;
   return new Promise((resolve, reject) => {
@@ -34,7 +32,6 @@ exports.saveOtpToDatabase = (email, otp, expiresAt) => {
   });
 }
 
-// Get OTP from database
 exports.getOtpFromDatabase = (email) => {
   const query = `SELECT otp, otp_expires_at FROM users WHERE email = ?`;
   return new Promise((resolve, reject) => {
@@ -45,7 +42,6 @@ exports.getOtpFromDatabase = (email) => {
   });
 }
 
-// Update user's password
 exports.updateUserPassword = (email, hashedPassword) => {
   const query = `UPDATE users SET password = ? WHERE email = ?`;
   return new Promise((resolve, reject) => {
@@ -56,7 +52,6 @@ exports.updateUserPassword = (email, hashedPassword) => {
   });
 }
 
-// Delete OTP from database
 exports.deleteOtpFromDatabase = (email) => {
   const query = `UPDATE users SET otp = NULL, otp_expires_at = NULL WHERE email = ?`;
   return new Promise((resolve, reject) => {

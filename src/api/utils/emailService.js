@@ -22,10 +22,3 @@ exports.sendVerificationEmail = (userName, userEmail, verificationLink) => {
     });
 };
 
-// Example usage
-// const userName = 'John Doe';
-// const userEmail = 'johndoe@example.com';
-// const verificationLink = `https://yourapp.com/verify?token=yourGeneratedToken`;
-
-// sendVerificationEmail(userName, userEmail, verificationLink);
-

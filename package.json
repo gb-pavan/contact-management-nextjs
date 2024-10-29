@@ -28,9 +28,7 @@
     "react-dom": "19.0.0-rc-69d4b800-20241021",
     "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
-    "xlsx": "^0.18.5",
-    "yamljs": "^0.3.0"
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "eslint": "^8",
