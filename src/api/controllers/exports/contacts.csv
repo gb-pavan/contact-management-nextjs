@@ -1,6 +1,0 @@
-Name,Email,Phone,Address,Timezone,Created At
-Dev,dev@example.com,987654321,"H No 123, USA",America/New_York,2024-10-28 04:08:45
-Lee,lee@example.com,321654987,"101 Seoul St, South Korea",Asia/Seoul,2024-10-28 04:08:45
-Alex,alex@example.com,555123456,"123 Main St, UK",Europe/London,2024-10-28 04:08:45
-Maria,maria@example.com,789123456,"Apt 4, Mexico City, Mexico",America/Mexico_City,2024-10-28 04:08:45
-Sam,sam@example.com,123456789,"H No 456, Canada",America/Toronto,2024-10-28 04:08:45

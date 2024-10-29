@@ -419,7 +419,7 @@ exports.downloadContacts = async (req, res) => {
         const contacts = await contactService.getContactsByEmail(user_mail);
         console.log("contacts download", contacts);
 
-        const exportPath = path.join(__dirname, 'exports');
+        const exportPath = path.join(__dirname, '../exports');
         console.log("Checking path:", exportPath);
 
         // Ensure the exports directory exists
