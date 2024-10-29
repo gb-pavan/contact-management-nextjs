@@ -372,44 +372,90 @@ const processContacts = async (contacts, user_mail) => {
     }
 
 
+// exports.downloadContacts = async (req, res) => {
+//     const user_mail = req.query.user_mail;
+//     const contacts = await contactService.getContactsByEmail(user_mail); // Assume this gets all contacts
+//     console.log("contacts download", contacts);
+
+//     const exportPath = path.join(__dirname, 'exports');
+
+//     console.log("path checcking", exportPath);
+//     if (!fs.existsSync(exportPath)) {
+//         fs.mkdirSync(exportPath, { recursive: true });
+//     }
+
+//     const filePath = path.join(exportPath, 'contacts.csv');
+//     const csvWriter = createObjectCsvWriter({
+//         path: filePath,
+//         header: [
+//             { id: 'name', title: 'Name' },
+//             { id: 'email', title: 'Email' },
+//             { id: 'phone', title: 'Phone' },
+//             { id: 'address', title: 'Address' },
+//             { id: 'timezone', title: 'Timezone' },
+//             { id: 'created_at', title: 'Created At' }
+//         ]
+//     });
+
+//     try {
+//         await csvWriter.writeRecords(contacts);
+        
+//         // Send the file as a response
+//         res.download(filePath, 'contacts.csv', (err) => {
+//             if (err) {
+//                 console.error("Error sending file:", err);
+//                 res.status(500).send("Could not download the file.");
+//             }
+//         });
+//     } catch (error) {
+//         console.error("Error creating CSV file:", error);
+//         res.status(500).send("Error creating CSV file.");
+//     }
+// };
+
 exports.downloadContacts = async (req, res) => {
     const user_mail = req.query.user_mail;
-    const contacts = await contactService.getContactsByEmail(user_mail); // Assume this gets all contacts
-    console.log("contacts download", contacts);
-
-    const exportPath = path.join(__dirname, 'exports');
-
-    console.log("path checcking", exportPath);
-    if (!fs.existsSync(exportPath)) {
-        fs.mkdirSync(exportPath, { recursive: true });
-    }
-
-    const filePath = path.join(exportPath, 'contacts.csv');
-    const csvWriter = createObjectCsvWriter({
-        path: filePath,
-        header: [
-            { id: 'name', title: 'Name' },
-            { id: 'email', title: 'Email' },
-            { id: 'phone', title: 'Phone' },
-            { id: 'address', title: 'Address' },
-            { id: 'timezone', title: 'Timezone' },
-            { id: 'created_at', title: 'Created At' }
-        ]
-    });
-
     try {
+        const contacts = await contactService.getContactsByEmail(user_mail);
+        console.log("contacts download", contacts);
+
+        const exportPath = path.join(__dirname, 'exports');
+        console.log("Checking path:", exportPath);
+
+        // Ensure the exports directory exists
+        if (!fs.existsSync(exportPath)) {
+            fs.mkdirSync(exportPath, { recursive: true });
+        }
+
+        const filePath = path.join(exportPath, 'contacts.csv');
+        const csvWriter = createObjectCsvWriter({
+            path: filePath,
+            header: [
+                { id: 'name', title: 'Name' },
+                { id: 'email', title: 'Email' },
+                { id: 'phone', title: 'Phone' },
+                { id: 'address', title: 'Address' },
+                { id: 'timezone', title: 'Timezone' },
+                { id: 'created_at', title: 'Created At' }
+            ]
+        });
+
+        // Write records to the CSV file
         await csvWriter.writeRecords(contacts);
+        console.log("CSV file created at:", filePath);
         
         // Send the file as a response
         res.download(filePath, 'contacts.csv', (err) => {
             if (err) {
                 console.error("Error sending file:", err);
                 res.status(500).send("Could not download the file.");
+            } else {
+                console.log("File sent successfully.");
             }
         });
     } catch (error) {
-        console.error("Error creating CSV file:", error);
-        res.status(500).send("Error creating CSV file.");
+        console.error("Error in downloadContacts:", error);
+        res.status(500).send("Error creating or downloading the CSV file.");
     }
 };
 
